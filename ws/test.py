@@ -1,56 +1,55 @@
+"""obstacle_avoidance controller."""
+
+
 from controller import Robot
 
+
+# get the time step of the current world.
 TIMESTEP = 32
 MAX_SPEED = 6.28
 
-OBSTACLE_THRESHOLD = 100
-CLEAR_THRESHOLD = 70     # below this, we assume the path is clear
-TURN_DURATION = 1.0      # seconds for one full turn if uninterrupted
-TURN_SPEED = 0.8 * MAX_SPEED
 
 def run_robot(robot):
+
+    # Motor instance to drive robot
     left_motor = robot.getDevice('left wheel motor')
     right_motor = robot.getDevice('right wheel motor')
+
     left_motor.setPosition(float('inf'))
     right_motor.setPosition(float('inf'))
 
-    sensors = [robot.getDevice(f'ps{i}') for i in range(8)]
-    for s in sensors:
-        s.enable(TIMESTEP)
+    left_motor.setVelocity(0.0)
+    right_motor.setVelocity(0.0)
 
-    state = "FORWARD"
-    turn_start_time = 0
+    # IR sensors to detect obstalces
+    list_ps = []
+    for ind in [0, 1, 2, 5, 6, 7]:
+        sensor_name = 'ps' + str(ind)
+        list_ps.append(robot.getDevice(sensor_name))
+        list_ps[-1].enable(TIMESTEP)
 
+    # Main loop:
+    # - perform simulation steps until Webots is stopping the controller
     while robot.step(TIMESTEP) != -1:
-        ps_vals = [s.getValue() for s in sensors]
-        front_left = max(ps_vals[0], ps_vals[1], ps_vals[2])
-        front_right = max(ps_vals[5], ps_vals[6], ps_vals[7])
-        front_center = max(ps_vals[3], ps_vals[4])
 
-        # ======= STATE MACHINE =======
-        if state == "FORWARD":
-            if max(front_left, front_right, front_center) > OBSTACLE_THRESHOLD:
-                # Decide which way to turn
-                if front_left > front_right:
-                    state = "TURN_RIGHT"
-                else:
-                    state = "TURN_LEFT"
-                turn_start_time = robot.getTime()
-            else:
-                left_motor.setVelocity(MAX_SPEED)
-                right_motor.setVelocity(MAX_SPEED)
+        left_speed = MAX_SPEED
+        right_speed = MAX_SPEED
 
-        elif state in ["TURN_LEFT", "TURN_RIGHT"]:
-            elapsed = robot.getTime() - turn_start_time
+        # Read the sensors:
+        for ps in list_ps:
+            ps_val = ps.getValue()
 
-            # If we’ve turned long enough or path is clear, stop turning
-            if (max(front_left, front_right, front_center) < CLEAR_THRESHOLD) or elapsed > TURN_DURATION:
-                state = "FORWARD"
-                continue
+            # Process sensor data here.
+            if ps_val > 100:
+                # turn
+                left_speed = -MAX_SPEED
 
-            if state == "TURN_LEFT":
-                left_motor.setVelocity(-TURN_SPEED)
-                right_motor.setVelocity(TURN_SPEED)
-            else:  # TURN_RIGHT
-                left_motor.setVelocity(TURN_SPEED)
-                right_motor.setVelocity(-TURN_SPEED)
+        # Drive robot
+        left_motor.setVelocity(left_speed)
+        right_motor.setVelocity(right_speed)
+
+
+if __name__ == "__main__":
+    # create the Robot instance.
+    my_robot = Robot()
+    run_robot(my_robot)
