@@ -1,0 +1,60 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/BrushedAluminium.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/rocks/protos/Rock.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.13389179200860646 -0.3406665269518402 -0.9306015825514673 5.48393578725809
+  position -1.2622610323173 -1.006136707386672 0.6711526231783516
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallThickness 0.005
+  wallHeight 0.05
+  wallAppearance BrushedAluminium {
+    IBLStrength 0
+  }
+}
+Rock {
+  translation -0.28 0 0
+  name "rock(3)"
+  scale 1.5
+}
+Rock {
+  translation 0.13 -0.12 0
+  name "rock(1)"
+  scale 1.5
+}
+E-puck {
+  hidden position_0_0 3156.557194463783
+  hidden position_0_1 5349.282109119123
+  hidden linearVelocity_0 0.04833238901738719 -0.11600827521719477 2.402891117815552e-09
+  hidden angularVelocity_0 0.004552822911387416 0.0018884739263256055 -2.283952442830601e-06
+  hidden rotation_1 0 1 0 2.3981702596307506
+  hidden linearVelocity_1 0.04834087810682601 -0.11603142788313656 -6.479973489465554e-09
+  hidden angularVelocity_1 5.801551783413716 2.4170909606787703 5.606971642840172e-07
+  hidden rotation_2 0 -1 0 3.991772597885027
+  hidden linearVelocity_2 0.04834277876215698 -0.11603063609436572 -9.029630300736927e-09
+  hidden angularVelocity_2 5.801551401646855 2.4170918770092693 5.156144219487437e-07
+  translation -0.3460936963682483 0.14039727137605248 -6.395779437936774e-05
+  rotation -0.0002882341955349594 -0.0004325693537461559 0.9999998649023922 -1.1760370647738352
+  controller "obstacle-avoidance"
+}
+Rock {
+  translation -0.15 0.34 0
+  name "rock(2)"
+  scale 1.5
+}
